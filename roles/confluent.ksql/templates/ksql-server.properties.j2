@@ -40,8 +40,8 @@ sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
    keyTab="{{kerberos.keytab_dir}}/{{ksql_kerberos_keytab_path | basename}}" \
    principal="{{ksql_kerberos_principal}}";
 {% endif %}
-{% if kafka_broker_listeners[ksql_kafka_listener_name]['sasl_protocol'] | default(sasl_protocol) | normalize_sasl_protocol == 'SCRAM-SHA-256' %}
-sasl.mechanism=SCRAM-SHA-256
+{% if kafka_broker_listeners[ksql_kafka_listener_name]['sasl_protocol'] | default(sasl_protocol) | normalize_sasl_protocol == 'SCRAM-SHA-512' %}
+sasl.mechanism=SCRAM-SHA-512
 sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required \
    username="{{sasl_scram_users.ksql.principal}}" password="{{sasl_scram_users.ksql.password}}";
 {% endif %}

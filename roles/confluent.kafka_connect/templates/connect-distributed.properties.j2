@@ -86,8 +86,8 @@ producer.sasl.mechanism=PLAIN
 producer.sasl.mechanism=GSSAPI
 producer.sasl.kerberos.service.name={{kerberos_kafka_broker_primary}}
 {% endif %}
-{% if kafka_broker_listeners[kafka_connect_kafka_listener_name]['sasl_protocol'] | default(sasl_protocol) | normalize_sasl_protocol == 'SCRAM-SHA-256' %}
-producer.sasl.mechanism=SCRAM-SHA-256
+{% if kafka_broker_listeners[kafka_connect_kafka_listener_name]['sasl_protocol'] | default(sasl_protocol) | normalize_sasl_protocol == 'SCRAM-SHA-512' %}
+producer.sasl.mechanism=SCRAM-SHA-512
 {% endif %}
 {% if kafka_broker_listeners[kafka_connect_kafka_listener_name]['sasl_protocol'] | default(sasl_protocol) | normalize_sasl_protocol == 'OAUTHBEARER' %}
 producer.sasl.mechanism=OAUTHBEARER
@@ -115,8 +115,8 @@ consumer.sasl.mechanism=PLAIN
 consumer.sasl.mechanism=GSSAPI
 consumer.sasl.kerberos.service.name={{kerberos_kafka_broker_primary}}
 {% endif %}
-{% if kafka_broker_listeners[kafka_connect_kafka_listener_name]['sasl_protocol'] | default(sasl_protocol) | normalize_sasl_protocol == 'SCRAM-SHA-256' %}
-consumer.sasl.mechanism=SCRAM-SHA-256
+{% if kafka_broker_listeners[kafka_connect_kafka_listener_name]['sasl_protocol'] | default(sasl_protocol) | normalize_sasl_protocol == 'SCRAM-SHA-512' %}
+consumer.sasl.mechanism=SCRAM-SHA-512
 {% endif %}
 {% if kafka_broker_listeners[kafka_connect_kafka_listener_name]['sasl_protocol'] | default(sasl_protocol) | normalize_sasl_protocol == 'OAUTHBEARER' %}
 consumer.sasl.mechanism=OAUTHBEARER
