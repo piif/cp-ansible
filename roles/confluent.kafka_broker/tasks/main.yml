@@ -3,6 +3,14 @@
     name: confluent.common
   when: not common_role_completed|bool
 
+- name: "Worldline overloading: save jaas config"
+  copy:
+    remote_src: yes
+    src: /etc/kafka/kafka_server_jaas.conf
+    dest: /etc/kafka/kafka_server_jaas.conf.save
+    force: no
+  when: confluent_package_version == "5.5.2"
+
 - name: Install the Kafka Broker Packages
   yum:
     name: "{{item}}{{confluent_package_redhat_suffix}}"
@@ -79,6 +87,10 @@
     group: "{{kafka_broker_group}}"
     recurse: true
   with_items: "{{kafka_broker.datadir}}"
+
+- name: check value
+  debug:
+    msg: "{{ kafka_broker_configure_additional_brokers }} -> {{ kafka_broker_inter_broker_listener_name }}"
 
 - name: Create Kafka Broker Config
   template:
@@ -176,6 +188,31 @@
   command: /bin/true
   notify: restart kafka
   when: certs_updated|bool
+
+- name: "Worldline overloading: force jmx for kafka"
+  copy:
+    remote_src: yes
+    src: /etc/jmx_exporter/kafka.yml
+    dest: /opt/prometheus/kafka.yml
+    backup: yes
+  notify: restart kafka
+  when: confluent_package_version == "5.5.2"
+
+- name: "Worldline overloading: restore jaas config"
+  copy:
+    remote_src: yes
+    src: /etc/kafka/kafka_server_jaas.conf.save
+    dest: /etc/kafka/kafka_server_jaas.conf
+  notify: restart kafka
+  when: confluent_package_version == "5.5.2"
+
+- name: "Worldline overloading: remove invalid listeners"
+  lineinfile:
+    path: "{{ kafka_broker.config_file }}"
+    regexp: "listener.name..*.sasl.enabled.mechanisms=[^,]*$"
+    state: absent
+  notify: restart kafka
+  when: confluent_package_version == "5.5.2"
 
 - meta: flush_handlers
 

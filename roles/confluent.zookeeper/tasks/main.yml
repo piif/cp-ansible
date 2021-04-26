@@ -155,6 +155,15 @@
   notify: restart zookeeper
   when: certs_updated|bool
 
+- name: "Worldline overloading: force jmx for zookeeper"
+  copy:
+    remote_src: yes
+    src: /etc/jmx_exporter/zookeeper.yml
+    dest: /opt/prometheus/zookeeper.yml
+    backup: yes
+  notify: restart zookeeper
+  when: confluent_package_version == "5.5.2"
+
 - meta: flush_handlers
 
 - name: Zookeeper Service Started
