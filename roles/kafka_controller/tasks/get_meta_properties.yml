@@ -3,6 +3,7 @@
   shell: "{{ binary_base_path }}/bin/kafka-storage info -c {{ kafka_controller.config_file }}"
   ignore_errors: true
   failed_when: false
+  changed_when: false
   register: formatted
 
 - name: Get ClusterId
